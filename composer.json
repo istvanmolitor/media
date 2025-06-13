@@ -14,7 +14,8 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "tightenco/ziggy": "^2.4",
-        "molitor/admin": "dev-main"
+        "molitor/admin": "dev-main",
+        "molitor/user": "dev-main"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -86,7 +87,11 @@
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/istvanmolitor/admin.git"
+            "url": "git@github.com:istvanmolitor/admin.git"
+        },
+        {
+            "type": "git",
+            "url": "git@github.com:istvanmolitor/user.git"
         }
     ]
 }
