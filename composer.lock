@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "499f49fad2ff33c113694399d62851b5",
+    "content-hash": "462c3f926f838e412ed6cc3aec8e036b",
     "packages": [
         {
             "name": "brick/math",
@@ -2079,8 +2079,8 @@
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/istvanmolitor/admin.git",
-                "reference": "1e49e5027d2aa895e917d8f85a61f74d142ae9a8"
+                "url": "git@github.com:istvanmolitor/admin.git",
+                "reference": "5a17aef4513e2690d40a724fcf7135a0a10d0cbf"
             },
             "default-branch": true,
             "type": "library",
@@ -2099,7 +2099,37 @@
                 }
             ],
             "description": "Admin",
-            "time": "2025-06-12T19:16:27+00:00"
+            "time": "2025-06-12T20:18:16+00:00"
+        },
+        {
+            "name": "molitor/user",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:istvanmolitor/user.git",
+                "reference": "e1c160715b1f60ee68f03108ec71687e73ccaaa3"
+            },
+            "require": {
+                "molitor/admin": "dev-main"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Molitor\\User\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Molitor István",
+                    "email": "istvanmolitor@gmail.com"
+                }
+            ],
+            "description": "User",
+            "time": "2025-06-13T06:13:22+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -7023,16 +7053,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.5.22",
+            "version": "11.5.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4cd72faaa8f811e4cc63040cba167757660a5538"
+                "reference": "86ebcd8a3dbcd1857d88505109b2a2b376501cde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4cd72faaa8f811e4cc63040cba167757660a5538",
-                "reference": "4cd72faaa8f811e4cc63040cba167757660a5538",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/86ebcd8a3dbcd1857d88505109b2a2b376501cde",
+                "reference": "86ebcd8a3dbcd1857d88505109b2a2b376501cde",
                 "shasum": ""
             },
             "require": {
@@ -7104,7 +7134,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.22"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.23"
             },
             "funding": [
                 {
@@ -7128,7 +7158,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-06T02:48:05+00:00"
+            "time": "2025-06-13T05:47:49+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -8246,7 +8276,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "molitor/admin": 20
+        "molitor/admin": 20,
+        "molitor/user": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
