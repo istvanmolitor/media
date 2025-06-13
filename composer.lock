@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "462c3f926f838e412ed6cc3aec8e036b",
+    "content-hash": "59043f94a1514eec42ffbe73ec43344a",
     "packages": [
         {
             "name": "brick/math",
@@ -2100,6 +2100,33 @@
             ],
             "description": "Admin",
             "time": "2025-06-12T20:18:16+00:00"
+        },
+        {
+            "name": "molitor/menu",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:istvanmolitor/menu.git",
+                "reference": "5bb1ea168b4ee1667bb644f8647fbfd32519c19a"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Molitor\\Menu\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Molitor István",
+                    "email": "istvanmolitor@gmail.com"
+                }
+            ],
+            "description": "Menü kezelése",
+            "time": "2025-06-13T07:55:14+00:00"
         },
         {
             "name": "molitor/user",
@@ -8277,6 +8304,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "molitor/admin": 20,
+        "molitor/menu": 20,
         "molitor/user": 20
     },
     "prefer-stable": true,
