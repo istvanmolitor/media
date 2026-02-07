@@ -1,0 +1,28 @@
+{
+    "name": "istvanmolitor/media",
+    "description": "Media",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Molitor István",
+            "email": "istvanmolitor@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "istvanmolitor/admin": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "Molitor\\Media\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Molitor\\Media\\Providers\\MediaServiceProvider"
+            ]
+        }
+    }
+}
