@@ -4,8 +4,12 @@ use Illuminate\Support\Facades\Route;
 use Molitor\Media\Http\Controllers\MediaFileController;
 use Molitor\Media\Http\Controllers\MediaFolderController;
 
+// Public media file download (no auth required)
+Route::get('media/files/{id}/download', [MediaFileController::class, 'download'])
+    ->name('media.files.download');
+
 Route::prefix('media')
-    ->middleware(['api', 'auth:sanctum'])
+    ->middleware(['auth:sanctum'])
     ->name('media.')
     ->group(function () {
         // Media Folders

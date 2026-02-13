@@ -14,6 +14,7 @@ class MediaFileResource extends JsonResource
             'filename' => $this->filename,
             'path' => $this->path,
             'url' => asset('storage/' . $this->path),
+            'download_url' => route('media.files.download', ['id' => $this->id]),
             'mime_type' => $this->mime_type,
             'size' => $this->size,
             'folder_id' => $this->folder_id,

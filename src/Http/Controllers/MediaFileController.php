@@ -180,6 +180,35 @@ class MediaFileController extends Controller
         ]);
     }
 
+    #[OA\Get(
+        path: "/api/media/files/{id}/download",
+        summary: "Download a media file",
+        tags: ["Media"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "File download"),
+            new OA\Response(response: 404, description: "Not found")
+        ]
+    )]
+    public function download(int $id)
+    {
+        $file = $this->mediaFileRepository->getById($id);
+
+        if (!$file) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        $filePath = storage_path('app/public/' . $file->path);
+
+        if (!file_exists($filePath)) {
+            return response()->json(['message' => 'File not found on disk'], 404);
+        }
+
+        return response()->download($filePath, $file->filename);
+    }
+
     #[OA\Delete(
         path: "/api/media/files/{id}",
         summary: "Delete a media file",
