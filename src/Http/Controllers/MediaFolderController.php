@@ -44,6 +44,23 @@ class MediaFolderController extends Controller
     }
 
     #[OA\Get(
+        path: "/api/media/folders/tree",
+        summary: "Get media folders as tree",
+        tags: ["Media"],
+        security: [["sanctum" => []]],
+        responses: [
+            new OA\Response(response: 200, description: "Success")
+        ]
+    )]
+    public function tree(): JsonResponse
+    {
+        $tree = $this->mediaFolderRepository->getTree();
+        return response()->json([
+            'data' => MediaFolderResource::collection($tree)
+        ]);
+    }
+
+    #[OA\Get(
         path: "/api/media/folders/{id}",
         summary: "Get a media folder by ID",
         tags: ["Media"],
@@ -115,6 +132,41 @@ class MediaFolderController extends Controller
 
         return response()->json([
             'data' => new MediaFolderResource($folder)
+        ]);
+    }
+
+    #[OA\Patch(
+        path: "/api/media/folders/{id}/move",
+        summary: "Move a media folder under a new parent",
+        tags: ["Media"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\MediaType(mediaType: "application/json", schema: new OA\Schema(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "parent_id", type: "integer", nullable: true)
+                ]
+            ))
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Success"),
+            new OA\Response(response: 404, description: "Not found")
+        ]
+    )]
+    public function move(int $id): JsonResponse
+    {
+        $folder = $this->mediaFolderRepository->getById($id);
+        if (!$folder) {
+            return response()->json(['message' => 'Folder not found'], 404);
+        }
+        $parentId = request()->input('parent_id');
+        $moved = $this->mediaFolderRepository->move($folder, $parentId !== null ? (int)$parentId : null);
+        return response()->json([
+            'data' => new MediaFolderResource($moved)
         ]);
     }
 

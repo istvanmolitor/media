@@ -9,8 +9,11 @@ Route::prefix('media')
     ->name('media.')
     ->group(function () {
         // Media Folders
+        Route::get('folders/tree', [MediaFolderController::class, 'tree'])->name('folders.tree');
+        Route::patch('folders/{id}/move', [MediaFolderController::class, 'move'])->name('folders.move');
         Route::resource('folders', MediaFolderController::class);
 
         // Media Files
+        Route::patch('files/{id}/move', [MediaFileController::class, 'move'])->name('files.move');
         Route::resource('files', MediaFileController::class);
     });

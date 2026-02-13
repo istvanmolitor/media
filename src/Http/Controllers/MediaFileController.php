@@ -145,6 +145,41 @@ class MediaFileController extends Controller
         ]);
     }
 
+    #[OA\Patch(
+        path: "/api/media/files/{id}/move",
+        summary: "Move a media file to another folder",
+        tags: ["Media"],
+        security: [["sanctum" => []]],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\MediaType(mediaType: "application/json", schema: new OA\Schema(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "folder_id", type: "integer", nullable: true)
+                ]
+            ))
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Success"),
+            new OA\Response(response: 404, description: "Not found")
+        ]
+    )]
+    public function move(int $id): JsonResponse
+    {
+        $file = $this->mediaFileRepository->getById($id);
+        if (!$file) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+        $folderId = request()->input('folder_id');
+        $updated = $this->mediaFileRepository->update($file, ['folder_id' => $folderId !== null ? (int)$folderId : null]);
+        return response()->json([
+            'data' => new MediaFileResource($updated)
+        ]);
+    }
+
     #[OA\Delete(
         path: "/api/media/files/{id}",
         summary: "Delete a media file",
