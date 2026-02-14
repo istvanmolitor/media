@@ -12,7 +12,7 @@ class MediaServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
         // Load API routes with /api prefix
         $this->app->make(\Illuminate\Routing\Router::class)
