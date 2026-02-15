@@ -5,10 +5,10 @@ use Molitor\Media\Http\Controllers\MediaFileController;
 use Molitor\Media\Http\Controllers\MediaFolderController;
 
 // Public media file download (no auth required)
-Route::get('media/files/{id}/download', [MediaFileController::class, 'download'])
+Route::get('api/media/files/{id}/download', [MediaFileController::class, 'download'])
     ->name('media.files.download');
 
-Route::prefix('media')
+Route::prefix('api/media')
     ->middleware(['auth:sanctum'])
     ->name('media.')
     ->group(function () {
