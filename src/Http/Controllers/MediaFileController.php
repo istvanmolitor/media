@@ -7,8 +7,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Molitor\Media\Http\Requests\StoreMediaFileRequest;
 use Molitor\Media\Http\Requests\UpdateMediaFileRequest;
-use Molitor\Media\Repositories\MediaFileRepositoryInterface;
 use Molitor\Media\Http\Resources\MediaFileResource;
+use Molitor\Media\Repositories\MediaFileRepositoryInterface;
 use OpenApi\Attributes as OA;
 
 class MediaFileController extends Controller
@@ -18,15 +18,15 @@ class MediaFileController extends Controller
     ) {}
 
     #[OA\Get(
-        path: "/api/media/files",
-        summary: "Get all media files",
-        tags: ["Media"],
-        security: [["sanctum" => []]],
+        path: '/api/media/files',
+        summary: 'Get all media files',
+        tags: ['Media'],
+        security: [['sanctum' => []]],
         parameters: [
-            new OA\Parameter(name: "folder_id", in: "query", required: false, schema: new OA\Schema(type: "integer"))
+            new OA\Parameter(name: 'folder_id', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: "Success")
+            new OA\Response(response: 200, description: 'Success'),
         ]
     )]
     public function index(): JsonResponse
@@ -34,64 +34,64 @@ class MediaFileController extends Controller
         $folderId = request()->query('folder_id');
 
         if ($folderId !== null) {
-            $files = $this->mediaFileRepository->getByFolderId((int)$folderId);
+            $files = $this->mediaFileRepository->getByFolderId((int) $folderId);
         } else {
             $files = $this->mediaFileRepository->getAll();
         }
 
         return response()->json([
-            'data' => MediaFileResource::collection($files)
+            'data' => MediaFileResource::collection($files),
         ]);
     }
 
     #[OA\Get(
-        path: "/api/media/files/{id}",
-        summary: "Get a media file by ID",
-        tags: ["Media"],
-        security: [["sanctum" => []]],
+        path: '/api/media/files/{id}',
+        summary: 'Get a media file by ID',
+        tags: ['Media'],
+        security: [['sanctum' => []]],
         parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: "Success"),
-            new OA\Response(response: 404, description: "Not found")
+            new OA\Response(response: 200, description: 'Success'),
+            new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
     public function show(int $id): JsonResponse
     {
         $file = $this->mediaFileRepository->getById($id);
 
-        if (!$file) {
+        if (! $file) {
             return response()->json(['message' => 'File not found'], 404);
         }
 
         return response()->json([
-            'data' => new MediaFileResource($file)
+            'data' => new MediaFileResource($file),
         ]);
     }
 
     #[OA\Post(
-        path: "/api/media/files",
-        summary: "Upload a media file",
-        tags: ["Media"],
-        security: [["sanctum" => []]],
+        path: '/api/media/files',
+        summary: 'Upload a media file',
+        tags: ['Media'],
+        security: [['sanctum' => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\MediaType(
-                mediaType: "multipart/form-data",
+                mediaType: 'multipart/form-data',
                 schema: new OA\Schema(
-                    required: ["file"],
+                    required: ['file'],
                     properties: [
-                        new OA\Property(property: "file", type: "string", format: "binary"),
-                        new OA\Property(property: "folder_id", type: "integer"),
-                        new OA\Property(property: "description", type: "string")
+                        new OA\Property(property: 'file', type: 'string', format: 'binary'),
+                        new OA\Property(property: 'folder_id', type: 'integer'),
+                        new OA\Property(property: 'description', type: 'string'),
                     ]
                 )
             )
         ),
         responses: [
-            new OA\Response(response: 201, description: "Created"),
-            new OA\Response(response: 422, description: "Validation error")
+            new OA\Response(response: 201, description: 'Created'),
+            new OA\Response(response: 422, description: 'Validation error'),
         ]
     )]
     public function store(StoreMediaFileRequest $request): JsonResponse
@@ -107,33 +107,33 @@ class MediaFileController extends Controller
 
         if (isset($validated['description'])) {
             $file = $this->mediaFileRepository->update($file, [
-                'description' => $validated['description']
+                'description' => $validated['description'],
             ]);
         }
 
         return response()->json([
-            'data' => new MediaFileResource($file)
+            'data' => new MediaFileResource($file),
         ], 201);
     }
 
     #[OA\Put(
-        path: "/api/media/files/{id}",
-        summary: "Update a media file",
-        tags: ["Media"],
-        security: [["sanctum" => []]],
+        path: '/api/media/files/{id}',
+        summary: 'Update a media file',
+        tags: ['Media'],
+        security: [['sanctum' => []]],
         parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: "Success"),
-            new OA\Response(response: 404, description: "Not found")
+            new OA\Response(response: 200, description: 'Success'),
+            new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
     public function update(UpdateMediaFileRequest $request, int $id): JsonResponse
     {
         $file = $this->mediaFileRepository->getById($id);
 
-        if (!$file) {
+        if (! $file) {
             return response()->json(['message' => 'File not found'], 404);
         }
 
@@ -141,68 +141,69 @@ class MediaFileController extends Controller
         $file = $this->mediaFileRepository->update($file, $validated);
 
         return response()->json([
-            'data' => new MediaFileResource($file)
+            'data' => new MediaFileResource($file),
         ]);
     }
 
     #[OA\Patch(
-        path: "/api/media/files/{id}/move",
-        summary: "Move a media file to another folder",
-        tags: ["Media"],
-        security: [["sanctum" => []]],
+        path: '/api/media/files/{id}/move',
+        summary: 'Move a media file to another folder',
+        tags: ['Media'],
+        security: [['sanctum' => []]],
         parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\MediaType(mediaType: "application/json", schema: new OA\Schema(
-                type: "object",
+            content: new OA\MediaType(mediaType: 'application/json', schema: new OA\Schema(
+                type: 'object',
                 properties: [
-                    new OA\Property(property: "folder_id", type: "integer", nullable: true)
+                    new OA\Property(property: 'folder_id', type: 'integer', nullable: true),
                 ]
             ))
         ),
         responses: [
-            new OA\Response(response: 200, description: "Success"),
-            new OA\Response(response: 404, description: "Not found")
+            new OA\Response(response: 200, description: 'Success'),
+            new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
     public function move(int $id): JsonResponse
     {
         $file = $this->mediaFileRepository->getById($id);
-        if (!$file) {
+        if (! $file) {
             return response()->json(['message' => 'File not found'], 404);
         }
         $folderId = request()->input('folder_id');
-        $updated = $this->mediaFileRepository->update($file, ['folder_id' => $folderId !== null ? (int)$folderId : null]);
+        $updated = $this->mediaFileRepository->update($file, ['folder_id' => $folderId !== null ? (int) $folderId : null]);
+
         return response()->json([
-            'data' => new MediaFileResource($updated)
+            'data' => new MediaFileResource($updated),
         ]);
     }
 
     #[OA\Get(
-        path: "/api/media/files/{id}/download",
-        summary: "Download a media file",
-        tags: ["Media"],
+        path: '/api/media/files/{id}/download',
+        summary: 'Download a media file',
+        tags: ['Media'],
         parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: "File download"),
-            new OA\Response(response: 404, description: "Not found")
+            new OA\Response(response: 200, description: 'File download'),
+            new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
     public function download(int $id)
     {
         $file = $this->mediaFileRepository->getById($id);
 
-        if (!$file) {
+        if (! $file) {
             return response()->json(['message' => 'File not found'], 404);
         }
 
-        $filePath = storage_path('app/public/' . $file->path);
+        $filePath = storage_path('app/public/'.$file->path);
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             return response()->json(['message' => 'File not found on disk'], 404);
         }
 
@@ -210,23 +211,23 @@ class MediaFileController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/media/files/{id}",
-        summary: "Delete a media file",
-        tags: ["Media"],
-        security: [["sanctum" => []]],
+        path: '/api/media/files/{id}',
+        summary: 'Delete a media file',
+        tags: ['Media'],
+        security: [['sanctum' => []]],
         parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 204, description: "No content"),
-            new OA\Response(response: 404, description: "Not found")
+            new OA\Response(response: 204, description: 'No content'),
+            new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
     public function destroy(int $id): JsonResponse
     {
         $file = $this->mediaFileRepository->getById($id);
 
-        if (!$file) {
+        if (! $file) {
             return response()->json(['message' => 'File not found'], 404);
         }
 

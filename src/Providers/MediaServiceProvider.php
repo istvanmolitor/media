@@ -12,8 +12,8 @@ class MediaServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
-        $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
+        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
     }
 
     public function register()

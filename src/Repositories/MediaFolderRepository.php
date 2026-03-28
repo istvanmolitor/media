@@ -66,6 +66,7 @@ class MediaFolderRepository implements MediaFolderRepositoryInterface
     public function update(MediaFolder $folder, array $data): MediaFolder
     {
         $folder->update($data);
+
         return $folder->fresh();
     }
 
@@ -83,13 +84,16 @@ class MediaFolderRepository implements MediaFolderRepositoryInterface
                     // Trying to move under its own descendant -> keep as is
                     return $folder;
                 }
-                if (!$current->parent_id) break;
+                if (! $current->parent_id) {
+                    break;
+                }
                 $current = $this->folder->find($current->parent_id);
             }
         }
 
         $folder->parent_id = $newParentId;
         $folder->save();
+
         return $folder->fresh(['parent', 'children']);
     }
 

@@ -42,6 +42,7 @@ class MediaFileRepository implements MediaFileRepositoryInterface
     public function update(MediaFile $file, array $data): MediaFile
     {
         $file->update($data);
+
         return $file->fresh();
     }
 
