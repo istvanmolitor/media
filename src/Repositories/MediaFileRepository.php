@@ -71,4 +71,33 @@ class MediaFileRepository implements MediaFileRepositoryInterface
             'user_id' => $userId,
         ]);
     }
+
+    public function storeFromUrl(string $url, ?int $folderId = null, ?int $userId = null): MediaFile
+    {
+        $contents = file_get_contents($url);
+        if ($contents === false) {
+            throw new \RuntimeException("Could not fetch file from URL: {$url}");
+        }
+
+        $filename = basename(parse_url($url, PHP_URL_PATH) ?: 'file');
+        if (! str_contains($filename, '.')) {
+            $filename .= '.bin'; // Fallback extension if not present
+        }
+
+        $path = 'media/'.\Illuminate\Support\Str::random(40).'.'.pathinfo($filename, PATHINFO_EXTENSION);
+        Storage::disk('public')->put($path, $contents);
+
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->buffer($contents);
+
+        return $this->create([
+            'name' => pathinfo($filename, PATHINFO_FILENAME),
+            'filename' => $filename,
+            'path' => $path,
+            'mime_type' => $mimeType,
+            'size' => strlen($contents),
+            'folder_id' => $folderId,
+            'user_id' => $userId,
+        ]);
+    }
 }

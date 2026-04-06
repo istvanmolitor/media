@@ -99,11 +99,19 @@ class MediaFileController extends Controller
         $validated = $request->validated();
         $userId = Auth::id();
 
-        $file = $this->mediaFileRepository->store(
-            $validated['file'],
-            $validated['folder_id'] ?? null,
-            $userId
-        );
+        if ($request->has('url')) {
+            $file = $this->mediaFileRepository->storeFromUrl(
+                $validated['url'],
+                $validated['folder_id'] ?? null,
+                $userId
+            );
+        } else {
+            $file = $this->mediaFileRepository->store(
+                $validated['file'],
+                $validated['folder_id'] ?? null,
+                $userId
+            );
+        }
 
         if (isset($validated['description'])) {
             $file = $this->mediaFileRepository->update($file, [
