@@ -20,6 +20,8 @@ class CreateMediaFilesTable extends Migration
             $table->string('path');
             $table->string('mime_type');
             $table->bigInteger('size');
+            $table->integer('width')->nullable();
+            $table->integer('height')->nullable();
             $table->foreignId('folder_id')->nullable()->constrained('media_folders')->onDelete('set null');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->text('description')->nullable();

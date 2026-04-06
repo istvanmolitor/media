@@ -17,10 +17,14 @@ class MediaFile extends Model
         'folder_id',
         'user_id',
         'description',
+        'width',
+        'height',
     ];
 
     protected $casts = [
         'size' => 'integer',
+        'width' => 'integer',
+        'height' => 'integer',
     ];
 
     public function folder(): BelongsTo

@@ -22,6 +22,8 @@ class MediaFileResource extends JsonResource
             'user_id' => $this->user_id,
             'user' => $this->whenLoaded('user'),
             'description' => $this->description,
+            'width' => $this->width,
+            'height' => $this->height,
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
         ];

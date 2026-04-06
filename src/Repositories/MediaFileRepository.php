@@ -61,12 +61,24 @@ class MediaFileRepository implements MediaFileRepositoryInterface
         $filename = $uploadedFile->getClientOriginalName();
         $path = $uploadedFile->store('media', 'public');
 
+        $width = null;
+        $height = null;
+        if (str_starts_with($uploadedFile->getMimeType(), 'image/')) {
+            $imageSize = @getimagesize($uploadedFile->getRealPath());
+            if ($imageSize) {
+                $width = $imageSize[0];
+                $height = $imageSize[1];
+            }
+        }
+
         return $this->create([
             'name' => pathinfo($filename, PATHINFO_FILENAME),
             'filename' => $filename,
             'path' => $path,
             'mime_type' => $uploadedFile->getMimeType(),
             'size' => $uploadedFile->getSize(),
+            'width' => $width,
+            'height' => $height,
             'folder_id' => $folderId,
             'user_id' => $userId,
         ]);
@@ -90,12 +102,24 @@ class MediaFileRepository implements MediaFileRepositoryInterface
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($contents);
 
+        $width = null;
+        $height = null;
+        if (str_starts_with($mimeType, 'image/')) {
+            $imageSize = @getimagesizefromstring($contents);
+            if ($imageSize) {
+                $width = $imageSize[0];
+                $height = $imageSize[1];
+            }
+        }
+
         return $this->create([
             'name' => pathinfo($filename, PATHINFO_FILENAME),
             'filename' => $filename,
             'path' => $path,
             'mime_type' => $mimeType,
             'size' => strlen($contents),
+            'width' => $width,
+            'height' => $height,
             'folder_id' => $folderId,
             'user_id' => $userId,
         ]);
