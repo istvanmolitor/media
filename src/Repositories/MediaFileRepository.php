@@ -59,7 +59,7 @@ class MediaFileRepository implements MediaFileRepositoryInterface
     public function store(UploadedFile $uploadedFile, ?int $folderId = null, ?int $userId = null): MediaFile
     {
         $filename = $uploadedFile->getClientOriginalName();
-        $path = $uploadedFile->store('media', 'public');
+        $extension = $uploadedFile->getClientOriginalExtension();
 
         $width = null;
         $height = null;
@@ -71,10 +71,10 @@ class MediaFileRepository implements MediaFileRepositoryInterface
             }
         }
 
-        return $this->create([
+        $mediaFile = $this->create([
             'name' => pathinfo($filename, PATHINFO_FILENAME),
             'filename' => $filename,
-            'path' => $path,
+            'path' => 'temporary', // Temporary path
             'mime_type' => $uploadedFile->getMimeType(),
             'size' => $uploadedFile->getSize(),
             'width' => $width,
@@ -82,6 +82,12 @@ class MediaFileRepository implements MediaFileRepositoryInterface
             'folder_id' => $folderId,
             'user_id' => $userId,
         ]);
+
+        $path = $this->updatePath($mediaFile);
+
+        $uploadedFile->storeAs($this->getFolder($mediaFile), basename($path), 'public');
+
+        return $mediaFile;
     }
 
     public function storeFromUrl(string $url, ?int $folderId = null, ?int $userId = null): MediaFile
@@ -91,13 +97,11 @@ class MediaFileRepository implements MediaFileRepositoryInterface
             throw new \RuntimeException("Could not fetch file from URL: {$url}");
         }
 
-        $filename = basename(parse_url($url, PHP_URL_PATH) ?: 'file');
-        if (! str_contains($filename, '.')) {
-            $filename .= '.bin'; // Fallback extension if not present
+        $originalFilename = basename(parse_url($url, PHP_URL_PATH) ?: 'file');
+        if (! str_contains($originalFilename, '.')) {
+            $originalFilename .= '.bin'; // Fallback extension if not present
         }
-
-        $path = 'media/'.\Illuminate\Support\Str::random(40).'.'.pathinfo($filename, PATHINFO_EXTENSION);
-        Storage::disk('public')->put($path, $contents);
+        $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
 
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($contents);
@@ -112,10 +116,10 @@ class MediaFileRepository implements MediaFileRepositoryInterface
             }
         }
 
-        return $this->create([
-            'name' => pathinfo($filename, PATHINFO_FILENAME),
-            'filename' => $filename,
-            'path' => $path,
+        $mediaFile = $this->create([
+            'name' => pathinfo($originalFilename, PATHINFO_FILENAME),
+            'filename' => $originalFilename,
+            'path' => 'temporary',
             'mime_type' => $mimeType,
             'size' => strlen($contents),
             'width' => $width,
@@ -123,5 +127,34 @@ class MediaFileRepository implements MediaFileRepositoryInterface
             'folder_id' => $folderId,
             'user_id' => $userId,
         ]);
+
+        $path = $this->updatePath($mediaFile);
+
+        Storage::disk('public')->put($path, $contents);
+
+        return $mediaFile;
+    }
+
+    public function getExtension(MediaFile $mediaFile): ?string
+    {
+        return $mediaFile->getExtension();
+    }
+
+    public function getFolder(MediaFile $mediaFile): string
+    {
+        return 'media/'.(int) floor($mediaFile->id / 1000);
+    }
+
+    private function updatePath(MediaFile $mediaFile): string
+    {
+        $extension = $this->getExtension($mediaFile);
+
+        $folder = (int) floor($mediaFile->id / 1000);
+        $newFilename = $mediaFile->id.($extension ? '.'.$extension : '');
+        $path = $this->getFolder($mediaFile).'/'.$newFilename;
+
+        $this->update($mediaFile, ['path' => $path]);
+
+        return $path;
     }
 }

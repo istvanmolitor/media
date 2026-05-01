@@ -21,7 +21,7 @@ interface MediaFileRepositoryInterface
     public function update(MediaFile $file, array $data): MediaFile;
 
     public function delete(MediaFile $file): bool;
-    
+
     public function store(UploadedFile $uploadedFile, ?int $folderId = null, ?int $userId = null): MediaFile;
 
     public function storeFromUrl(string $url, ?int $folderId = null, ?int $userId = null): MediaFile;

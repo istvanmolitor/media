@@ -36,4 +36,9 @@ class MediaFile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getExtension(): string
+    {
+        return pathinfo($this->filename, PATHINFO_EXTENSION);
+    }
 }
