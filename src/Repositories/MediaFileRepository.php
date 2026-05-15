@@ -157,4 +157,9 @@ class MediaFileRepository implements MediaFileRepositoryInterface
 
         return $path;
     }
+
+    public function getDownloadUrl(MediaFile $file): string
+    {
+        return route('media.files.download', ['id' => $file->id, 'filename' => $file->filename]);
+    }
 }

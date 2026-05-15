@@ -3,18 +3,22 @@
 namespace Molitor\Media\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Molitor\Media\Repositories\MediaFileRepositoryInterface;
 
 class MediaFileResource extends JsonResource
 {
     public function toArray($request): array
     {
+        /** @var MediaFileRepositoryInterface $mediaFileRepository */
+        $mediaFileRepository = app(MediaFileRepositoryInterface::class);
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'filename' => $this->filename,
             'path' => $this->path,
-            'url' => asset('storage/'.$this->path),
-            'download_url' => route('media.files.download', ['id' => $this->id]),
+            'url' => $mediaFileRepository->getDownloadUrl($this->resource),
+            'download_url' => $mediaFileRepository->getDownloadUrl($this->resource),
             'mime_type' => $this->mime_type,
             'size' => $this->size,
             'folder_id' => $this->folder_id,

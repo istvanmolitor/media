@@ -63,6 +63,37 @@ class MediaFolderRepository implements MediaFolderRepositoryInterface
         return $this->folder->create($data);
     }
 
+    public function getOrCreateByPath(array $segments): MediaFolder
+    {
+        $normalizedSegments = $this->normalizePathSegments($segments);
+
+        if ($normalizedSegments === []) {
+            throw new \InvalidArgumentException('At least one non-empty path segment is required.');
+        }
+
+        $parentId = null;
+        $currentPath = '';
+        $currentFolder = null;
+
+        foreach ($normalizedSegments as $segment) {
+            $currentPath .= '/'.$segment;
+
+            $currentFolder = $this->folder->newQuery()->firstOrCreate(
+                [
+                    'name' => $segment,
+                    'parent_id' => $parentId,
+                ],
+                [
+                    'path' => $currentPath,
+                ],
+            );
+
+            $parentId = $currentFolder->id;
+        }
+
+        return $currentFolder;
+    }
+
     public function update(MediaFolder $folder, array $data): MediaFolder
     {
         $folder->update($data);
@@ -100,5 +131,22 @@ class MediaFolderRepository implements MediaFolderRepositoryInterface
     public function delete(MediaFolder $folder): bool
     {
         return $folder->delete();
+    }
+
+    /**
+     * @param  array<int, string>  $segments
+     * @return array<int, string>
+     */
+    private function normalizePathSegments(array $segments): array
+    {
+        /** @var array<int, string> $normalizedSegments */
+        $normalizedSegments = collect($segments)
+            ->filter(fn (mixed $segment): bool => is_string($segment))
+            ->map(fn (string $segment): string => trim($segment))
+            ->filter(fn (string $segment): bool => $segment !== '')
+            ->values()
+            ->all();
+
+        return $normalizedSegments;
     }
 }

@@ -1,23 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Molitor\Media\Http\Controllers\MediaFileController;
-use Molitor\Media\Http\Controllers\MediaFolderController;
+use Molitor\Media\Http\Controllers\Api\MediaFileApiController;
+use Molitor\Media\Http\Controllers\Api\MediaFolderApiController;
 
-// Public media file download (no auth required)
-Route::get('api/media/files/{id}/download', [MediaFileController::class, 'download'])
-    ->name('media.files.download');
 
 Route::prefix('api/media')
     ->middleware(['auth:sanctum'])
     ->name('media.')
     ->group(function () {
         // Media Folders
-        Route::get('folders/tree', [MediaFolderController::class, 'tree'])->name('folders.tree');
-        Route::patch('folders/{id}/move', [MediaFolderController::class, 'move'])->name('folders.move');
-        Route::resource('folders', MediaFolderController::class);
+        Route::get('folders/tree', [MediaFolderApiController::class, 'tree'])->name('folders.tree');
+        Route::patch('folders/{id}/move', [MediaFolderApiController::class, 'move'])->name('folders.move');
+        Route::resource('folders', MediaFolderApiController::class);
 
         // Media Files
-        Route::patch('files/{id}/move', [MediaFileController::class, 'move'])->name('files.move');
-        Route::resource('files', MediaFileController::class);
+        Route::patch('files/{id}/move', [MediaFileApiController::class, 'move'])->name('files.move');
+        Route::resource('files', MediaFileApiController::class);
     });

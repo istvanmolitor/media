@@ -22,6 +22,11 @@ interface MediaFolderRepositoryInterface
 
     public function create(array $data): MediaFolder;
 
+    /**
+     * @param  array<int, string>  $segments
+     */
+    public function getOrCreateByPath(array $segments): MediaFolder;
+
     public function update(MediaFolder $folder, array $data): MediaFolder;
 
     /**
