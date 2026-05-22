@@ -14,8 +14,7 @@ class MediaFolderApiController extends Controller
 {
     public function __construct(
         protected MediaFolderRepositoryInterface $mediaFolderRepository
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -108,5 +107,3 @@ class MediaFolderApiController extends Controller
         return response()->json(null, 204);
     }
 }
-
-

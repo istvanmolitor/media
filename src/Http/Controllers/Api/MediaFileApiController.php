@@ -4,8 +4,8 @@ namespace Molitor\Media\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Molitor\Media\Http\Requests\StoreMediaFileRequest;
 use Molitor\Media\Http\Requests\UpdateMediaFileRequest;
 use Molitor\Media\Http\Resources\MediaFileResource;
@@ -15,8 +15,7 @@ class MediaFileApiController extends Controller
 {
     public function __construct(
         protected MediaFileRepositoryInterface $mediaFileRepository
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -120,5 +119,3 @@ class MediaFileApiController extends Controller
         return response()->json(null, 204);
     }
 }
-
-

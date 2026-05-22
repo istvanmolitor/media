@@ -11,8 +11,7 @@ class MediaFileController extends Controller
 {
     public function __construct(
         protected MediaFileRepositoryInterface $mediaFileRepository
-    ) {
-    }
+    ) {}
 
     public function download(int $id): BinaryFileResponse|JsonResponse
     {
@@ -31,5 +30,3 @@ class MediaFileController extends Controller
         return response()->download($filePath, $file->filename);
     }
 }
-
-

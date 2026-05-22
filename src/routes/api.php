@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Molitor\Media\Http\Controllers\Api\MediaFileApiController;
 use Molitor\Media\Http\Controllers\Api\MediaFolderApiController;
 
-
 Route::prefix('api/media')
     ->middleware(['auth:sanctum'])
     ->name('media.')
