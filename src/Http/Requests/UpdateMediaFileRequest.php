@@ -3,12 +3,13 @@
 namespace Molitor\Media\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class UpdateMediaFileRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('acl', 'media');
     }
 
     public function rules(): array
