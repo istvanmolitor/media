@@ -27,6 +27,13 @@ class MediaFileController extends Controller
             return response()->json(['message' => 'File not found on disk'], 404);
         }
 
+        if (str_starts_with((string) $file->mime_type, 'image/')) {
+            return response()->file($filePath, [
+                'Content-Type' => (string) $file->mime_type,
+                'Content-Disposition' => 'inline; filename="'.$file->filename.'"',
+            ]);
+        }
+
         return response()->download($filePath, $file->filename);
     }
 }
