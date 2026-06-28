@@ -28,6 +28,12 @@ class MediaFolderApiController extends Controller
 
         return response()->json([
             'data' => MediaFolderResource::collection($folders),
+            'columns' => [
+                ['key' => 'name', 'label' => 'Név', 'sortable' => true],
+                ['key' => 'description', 'label' => 'Leírás', 'sortable' => false],
+                ['key' => 'parent', 'label' => 'Szülő Mappa', 'sortable' => false],
+                ['key' => 'path', 'label' => 'Útvonal', 'sortable' => false],
+            ],
         ]);
     }
 
