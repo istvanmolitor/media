@@ -1,6 +1,6 @@
 {
     "name": "istvanmolitor/media",
-    "description": "Media",
+    "description": "Media file and folder management with an admin API for the Molitor package suite.",
     "type": "library",
     "license": "MIT",
     "authors": [
